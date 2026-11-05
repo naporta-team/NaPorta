@@ -27,7 +27,7 @@ const routes: Routes = [
     component: LayoutComponent,
     children: [
       { path: 'menu', component: MenuComponent },
-      { path: 'product/:id', component: ProductDetailsComponent },
+      // { path: 'product/:id', component: ProductDetailsComponent },
       
       { path: 'cart', component: CartComponent },
       { path: 'status', component: OrderStatusComponent },

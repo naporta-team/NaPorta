@@ -32,6 +32,7 @@ app.post("/sessions", async (req: FastifyRequest, reply: FastifyReply) => {
   const { email, password } = getAuthenticateSchemaBody.parse(req.body);
 
   const emailToLowerCase = email.trim().toLowerCase();
+  
   const user = await prisma.user.findUnique({
     where: {
       email: emailToLowerCase,
