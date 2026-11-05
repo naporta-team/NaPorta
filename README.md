@@ -6,6 +6,54 @@ Software para gerenciamento de solicitação de serviço de quarto. O cliente re
 
 > ✅ **Status v1:** Concluído
 
+## 🌐 Demo
+
+- **Frontend:** https://na-porta-gamma.vercel.app
+- **API:** https://naporta.onrender.com
+
+> ⚠️ A API está hospedada no plano gratuito do Render e pode demorar ~30s para responder na primeira requisição após inatividade.
+
+---
+
+## 🧭 Como testar
+
+### Painel Admin
+
+1. Acesse https://na-porta-gamma.vercel.app/admin/sign-in
+2. Use as credenciais de demonstração:
+   - **Email:** `admin@naporta.com`
+   - **Senha:** `123456`
+3. Navegue pelo dashboard, cardápio e pedidos
+
+### Fluxo do Hóspede (QRCode)
+
+O admin cria um quarto e um hóspede via API, que gera um token único:
+
+**1. Criar quarto:**
+```http
+POST https://naporta.onrender.com/rooms
+Content-Type: application/json
+
+{ "number": "101" }
+```
+
+**2. Criar hóspede** (use o `id` retornado no passo anterior):
+```http
+POST https://naporta.onrender.com/guests
+Content-Type: application/json
+
+{ "name": "João Silva", "room_id": "<id_do_quarto>" }
+```
+
+**3. Acessar como hóspede:**
+```
+https://na-porta-gamma.vercel.app/guest/<token>
+```
+
+O hóspede é identificado e redirecionado ao cardápio automaticamente.
+
+---
+
 ## Estrutura do Repositório
 
 - **`/api`** — Armazena o código backend da aplicação
@@ -14,7 +62,8 @@ Software para gerenciamento de solicitação de serviço de quarto. O cliente re
 ## Stack
 
 - **Backend:** Node.js, Fastify, Prisma ORM v7, PostgreSQL, Docker, Zod, bcryptjs
-- **Frontend:** Angular 16, Angular Material, Tailwind CSS
+- **Frontend:** Angular 16, Tailwind CSS, Angular Material
+- **Infra:** Vercel (frontend), Render (API), Neon (PostgreSQL)
 - **Tooling:** TypeScript, tsx, tsup
 
 ## Arquitetura
@@ -78,11 +127,13 @@ Software para gerenciamento de solicitação de serviço de quarto. O cliente re
 - [x] O funcionário deve poder registrar um hóspede e vincular a um quarto
 - [x] O funcionário deve poder gerenciar o cardápio (criar, ativar/desativar itens)
 - [x] O funcionário deve poder visualizar e atualizar o status dos pedidos
-- [ ] O hóspede deve ser identificado via QRCode ao acessar o sistema
+- [x] O hóspede deve ser identificado via QRCode ao acessar o sistema
 
 ## Requisitos Não-Funcionais (RNF)
 
-- [x] A senha do usuário precisa estar em formato hash
+- [x] Hóspede não pode ter mais de um pedido ativo (pending/preparing) simultaneamente
+- [x] Senha do usuário armazenada em hash (bcryptjs)
+- [x] Usuário não pode se cadastrar com e-mail duplicado
 - [x] Os dados da aplicação precisam estar persistidos em um banco PostgreSQL
 - [x] O banco de dados deve utilizar UUID v7 para performance e identificação
 - [x] O usuário deve ser identificado por um JWT entre as requisições
